@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Admission = () => {
   const [formData, setFormData] = useState({
+    admissionDate: "",
     studentName: "",
     contact: "",
     email: "",
@@ -13,11 +15,20 @@ const Admission = () => {
     status: "",
     batchNo: "",
     vendor: "",
+    location: "",
     bookedBy: "",
-    assignmentStatus: "",
-    note: "",
     courseType: "",
+    assignmentStatus: "",
     assignmentDate: "",
+    note: "",
+    admissionType: "",
+    paymentSlots: "",
+    courseFee: "",
+    discount: "",
+    totalPaid: "",
+    received: "",
+    refund: "",
+    balanceDue: ""
   });
 
   const handleChange = (e) => {
@@ -28,7 +39,15 @@ const Admission = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Admission Data:", formData);
-    // Add your submission logic here
+    axios.post("http://localhost:3000/admission", formData)
+    .then(data => {
+      if(data.data.insertedId){
+        alert("New admission created")
+      }
+    })
+    .catch(err => {
+      alert(err.message)
+    })
   };
 
   return (
@@ -39,15 +58,29 @@ const Admission = () => {
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl"
+        className="bg-white p-14 rounded-lg shadow-lg w-3/4 mx-auto"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Admission Form</h2>
         <form onSubmit={handleSubmit}>
-          {/* Student Information Section */}
+          {/* Admission Date & Student Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label htmlFor="admissionDate" className="block text-sm font-medium text-gray-700">
+                Admission Date
+              </label>
+              <input
+                type="date"
+                id="admissionDate"
+                name="admissionDate"
+                value={formData.admissionDate}
+                onChange={handleChange}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
             <div>
               <label htmlFor="studentName" className="block text-sm font-medium text-gray-700">
                 Student Name
@@ -63,9 +96,13 @@ const Admission = () => {
                 required
               />
             </div>
+          </div>
+
+          {/* Contact & Email */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
-                Contact
+                Contact Number
               </label>
               <input
                 type="text"
@@ -78,10 +115,6 @@ const Admission = () => {
                 required
               />
             </div>
-          </div>
-
-          {/* Contact Information Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email ID
@@ -97,6 +130,10 @@ const Admission = () => {
                 required
               />
             </div>
+          </div>
+
+          {/* Address Information */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div>
               <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                 Address
@@ -112,10 +149,6 @@ const Admission = () => {
                 required
               />
             </div>
-          </div>
-
-          {/* Location Information Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                 City
@@ -148,7 +181,7 @@ const Admission = () => {
             </div>
           </div>
 
-          {/* Gender and Status Section */}
+          {/* Gender & Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
@@ -187,7 +220,7 @@ const Admission = () => {
             </div>
           </div>
 
-          {/* Batch and Vendor Section */}
+          {/* Batch & Vendor */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="batchNo" className="block text-sm font-medium text-gray-700">
@@ -221,8 +254,23 @@ const Admission = () => {
             </div>
           </div>
 
-          {/* Assignment Section */}
+          {/* Location & Booked By */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter location"
+                required
+              />
+            </div>
             <div>
               <label htmlFor="bookedBy" className="block text-sm font-medium text-gray-700">
                 Booked By
@@ -238,6 +286,27 @@ const Admission = () => {
                 required
               />
             </div>
+          </div>
+
+          {/* Course Type */}
+          <div className="mb-6">
+            <label htmlFor="courseType" className="block text-sm font-medium text-gray-700">
+              Course Type
+            </label>
+            <input
+              type="text"
+              id="courseType"
+              name="courseType"
+              value={formData.courseType}
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter course type"
+              required
+            />
+          </div>
+
+          {/* Assignment Status & Date */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label htmlFor="assignmentStatus" className="block text-sm font-medium text-gray-700">
                 Assignment Status
@@ -255,25 +324,6 @@ const Admission = () => {
                 <option value="Completed">Completed</option>
               </select>
             </div>
-          </div>
-
-          {/* Course and Assignment Date Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label htmlFor="courseType" className="block text-sm font-medium text-gray-700">
-                Course Type
-              </label>
-              <input
-                type="text"
-                id="courseType"
-                name="courseType"
-                value={formData.courseType}
-                onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Enter course type"
-                required
-              />
-            </div>
             <div>
               <label htmlFor="assignmentDate" className="block text-sm font-medium text-gray-700">
                 Assignment Date
@@ -290,7 +340,7 @@ const Admission = () => {
             </div>
           </div>
 
-          {/* Note Section */}
+          {/* Note */}
           <div className="mb-6">
             <label htmlFor="note" className="block text-sm font-medium text-gray-700">
               Note
@@ -304,6 +354,138 @@ const Admission = () => {
               placeholder="Enter any additional notes"
               rows="3"
             />
+          </div>
+
+          {/* Payment Information */}
+          <div className="mt-8 border-t pt-6">
+            <h3 className="text-xl font-semibold mb-4">Payment Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="admissionType" className="block text-sm font-medium text-gray-700">
+                  Admission Type
+                </label>
+                <select
+                  id="admissionType"
+                  name="admissionType"
+                  value={formData.admissionType}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                >
+                  <option value="">Select admission type</option>
+                  <option value="New">New</option>
+                  <option value="Transfer">Transfer</option>
+                  <option value="Returning">Returning</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="paymentSlots" className="block text-sm font-medium text-gray-700">
+                  Payment Slots
+                </label>
+                <input
+                  type="text"
+                  id="paymentSlots"
+                  name="paymentSlots"
+                  value={formData.paymentSlots}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter payment slots"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="courseFee" className="block text-sm font-medium text-gray-700">
+                  Course Fee
+                </label>
+                <input
+                  type="number"
+                  id="courseFee"
+                  name="courseFee"
+                  value={formData.courseFee}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter course fee"
+                />
+              </div>
+              <div>
+                <label htmlFor="discount" className="block text-sm font-medium text-gray-700">
+                  Discount
+                </label>
+                <input
+                  type="number"
+                  id="discount"
+                  name="discount"
+                  value={formData.discount}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter discount"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="totalPaid" className="block text-sm font-medium text-gray-700">
+                  Total Paid
+                </label>
+                <input
+                  type="number"
+                  id="totalPaid"
+                  name="totalPaid"
+                  value={formData.totalPaid}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter total paid"
+                />
+              </div>
+              <div>
+                <label htmlFor="received" className="block text-sm font-medium text-gray-700">
+                  Received
+                </label>
+                <input
+                  type="number"
+                  id="received"
+                  name="received"
+                  value={formData.received}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter amount received"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="refund" className="block text-sm font-medium text-gray-700">
+                  Refund
+                </label>
+                <input
+                  type="number"
+                  id="refund"
+                  name="refund"
+                  value={formData.refund}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter refund amount"
+                />
+              </div>
+              <div>
+                <label htmlFor="balanceDue" className="block text-sm font-medium text-gray-700">
+                  Balance Due
+                </label>
+                <input
+                  type="number"
+                  id="balanceDue"
+                  name="balanceDue"
+                  value={formData.balanceDue}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter balance due"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Submit Button */}
