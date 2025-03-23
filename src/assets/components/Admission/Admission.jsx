@@ -52,18 +52,21 @@ const Admission = () => {
 
   return (
     <motion.div
-      className="flex items-center justify-start min-h-screen"
+      className="flex items-center justify-start min-h-screen w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white p-14 rounded-lg shadow-lg w-3/4 mx-auto"
+        className="bg-white p-14 rounded-lg shadow-lg mx-auto w-full"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Admission Form</h2>
+        <motion.h2
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="text-3xl font-bold mb-6 text-center text-gray-800">Admission Form</motion.h2>
         <form onSubmit={handleSubmit}>
           {/* Admission Date & Student Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -234,23 +237,6 @@ const Admission = () => {
                 <option value="Batch 4">Batch 4</option>
                 <option value="Batch 5">Batch 5</option>
               </select>
-              {/* <select
-                type="text"
-                id="batchNo"
-                name="batchNo"
-                value={formData.batchNo}
-                onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Enter batch number"
-                required
-              />
-              <option value="">Select batch number</option>
-              <option value="Batch 1">Batch 1</option>
-              <option value="Batch 2">Batch 2</option>
-              <option value="Batch 3">Batch 3</option>
-              <option value="Batch 4">Batch 4</option>
-              <option value="Batch 5">Batch 5</option>
-              </select> */}
             </div>
             <div>
               <label htmlFor="vendor" className="block text-sm font-medium text-gray-700">
@@ -290,16 +276,12 @@ const Admission = () => {
               <label htmlFor="bookedBy" className="block text-sm font-medium text-gray-700">
                 Booked By
               </label>
-              <input
-                type="text"
-                id="bookedBy"
-                name="bookedBy"
-                value={formData.bookedBy}
-                onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Enter booked by"
-                required
-              />
+              <select className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Phone</option>
+                <option value="Admin">Online</option>
+                <option value="Staff">Face to Face</option>
+                <option value="Student">Invoice</option>
+              </select>
             </div>
           </div>
 
@@ -308,16 +290,11 @@ const Admission = () => {
             <label htmlFor="courseType" className="block text-sm font-medium text-gray-700">
               Course Type
             </label>
-            <input
-              type="text"
-              id="courseType"
-              name="courseType"
-              value={formData.courseType}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter course type"
-              required
-            />
+            <select className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">Class Based</option>
+              <option value="Course 1">Online / Distance Learning</option>
+              <option value="Course 2">Blended Learning</option>
+            </select>
           </div>
 
           {/* Assignment Status & Date */}
@@ -387,10 +364,8 @@ const Admission = () => {
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
                 >
-                  <option value="">Select admission type</option>
-                  <option value="New">New</option>
-                  <option value="Transfer">Transfer</option>
-                  <option value="Returning">Returning</option>
+                  <option value="">General</option>
+                  <option value="">Price Plan</option>
                 </select>
               </div>
               <div>
