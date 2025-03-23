@@ -226,7 +226,15 @@ const Admission = () => {
               <label htmlFor="batchNo" className="block text-sm font-medium text-gray-700">
                 Batch No
               </label>
-              <input
+              <select className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Select batch number</option>
+                <option value="Batch 1">Batch 1</option>
+                <option value="Batch 2">Batch 2</option>
+                <option value="Batch 3">Batch 3</option>
+                <option value="Batch 4">Batch 4</option>
+                <option value="Batch 5">Batch 5</option>
+              </select>
+              {/* <select
                 type="text"
                 id="batchNo"
                 name="batchNo"
@@ -236,6 +244,13 @@ const Admission = () => {
                 placeholder="Enter batch number"
                 required
               />
+              <option value="">Select batch number</option>
+              <option value="Batch 1">Batch 1</option>
+              <option value="Batch 2">Batch 2</option>
+              <option value="Batch 3">Batch 3</option>
+              <option value="Batch 4">Batch 4</option>
+              <option value="Batch 5">Batch 5</option>
+              </select> */}
             </div>
             <div>
               <label htmlFor="vendor" className="block text-sm font-medium text-gray-700">
