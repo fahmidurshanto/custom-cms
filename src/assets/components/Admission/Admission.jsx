@@ -362,7 +362,7 @@ const Admission = () => {
                   value={formData.admissionType}
                   onChange={handleChange}
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  required
+                  
                 >
                   <option value="">General</option>
                   <option value="">Price Plan</option>
