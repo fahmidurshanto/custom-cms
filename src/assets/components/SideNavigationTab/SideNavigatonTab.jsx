@@ -158,7 +158,7 @@ const SideNavigationTab = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-2xl font-bold mb-4">Location Content</h1>
+              <h1 className="text-2xl font-bold mb-4">Location Management</h1>
              <Location></Location>
             </motion.div>
           </TabPanel>
