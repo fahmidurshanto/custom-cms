@@ -14,16 +14,16 @@ import Marketing from "../Marketing/Marketing";
 import Reports from "../Reports/Reports";
 
 const SideNavigationTab = () => {
-  const [tabIndex, setTabIndex] = useState(0); // State to track the active tab index
+  const [tabIndex, setTabIndex] = useState([]); // State to track the active tab index
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       {/* Left Side Navigation Bar */}
-      <div className="w-48 bg-gray-100 p-4">
-      <h2>Navigation</h2>
+      <div className="bg-gray-100 p-4">
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
           <TabList className="flex flex-col gap-2">
-            <Tab>
+            {/* Dashboard */}
+            <Tab className="w-full p-2 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -32,7 +32,8 @@ const SideNavigationTab = () => {
                 Dashboard
               </motion.div>
             </Tab>
-            <Tab>
+            {/* Admission */}
+            <Tab className="w-full p-2 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -41,7 +42,8 @@ const SideNavigationTab = () => {
                 Admission
               </motion.div>
             </Tab>
-            <Tab>
+            {/* Location */}
+            <Tab className="w-full p-2 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -50,7 +52,8 @@ const SideNavigationTab = () => {
                 Location
               </motion.div>
             </Tab>
-            <Tab>
+            {/* Vendors */}
+            <Tab className="w-full p-2 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -59,7 +62,8 @@ const SideNavigationTab = () => {
                 Vendors
               </motion.div>
             </Tab>
-            <Tab>
+            {/* Courses */}
+            <Tab className="w-full p-2 px-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -68,7 +72,8 @@ const SideNavigationTab = () => {
                 Courses
               </motion.div>
             </Tab>
-                <Tab>
+            {/* Batches */}
+                <Tab className="w-full p-2 px-4">
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -76,8 +81,9 @@ const SideNavigationTab = () => {
                 >
                     Batches
                 </motion.div>
+                {/* Certification Dispatch */}
                 </Tab>
-                <Tab>
+                <Tab className="w-full p-2 px-4">
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -86,7 +92,8 @@ const SideNavigationTab = () => {
                     Certification Dispatch
                 </motion.div>
                 </Tab>
-                <Tab>
+                {/* Employees */}
+                <Tab className="w-full p-2 px-4">
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -95,7 +102,8 @@ const SideNavigationTab = () => {
                     Employees
                 </motion.div>
                 </Tab>
-                <Tab>
+                {/* E-Marketing */}
+                <Tab className="w-full p-2 px-4">
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -104,7 +112,8 @@ const SideNavigationTab = () => {
                     E-Marketing
                 </motion.div>
                 </Tab>
-                <Tab>
+                {/* Reports */}
+                <Tab className="w-full p-2 px-4">
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -120,6 +129,7 @@ const SideNavigationTab = () => {
       {/* Right Side Content */}
       <div className="flex-1 p-6">
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+          {/* Dashboard */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -130,6 +140,7 @@ const SideNavigationTab = () => {
               <DashBoard></DashBoard>
             </motion.div>
           </TabPanel>
+          {/* Admission */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -140,6 +151,7 @@ const SideNavigationTab = () => {
               <Admission></Admission>
             </motion.div>
           </TabPanel>
+          {/* Location */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -150,6 +162,7 @@ const SideNavigationTab = () => {
              <Location></Location>
             </motion.div>
           </TabPanel>
+          {/* Vendors */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -160,6 +173,7 @@ const SideNavigationTab = () => {
              <Vendors></Vendors>
             </motion.div>
           </TabPanel>
+          {/* Courses */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -170,6 +184,7 @@ const SideNavigationTab = () => {
                 <Courses></Courses>
             </motion.div>
           </TabPanel>
+          {/* Batches */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -180,6 +195,7 @@ const SideNavigationTab = () => {
                 <Batches></Batches>
             </motion.div>
           </TabPanel>
+          {/* Certification Dispatch */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -190,6 +206,7 @@ const SideNavigationTab = () => {
                 <CertificationDispatch></CertificationDispatch>
             </motion.div>
           </TabPanel>
+          {/* Employees */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -200,6 +217,7 @@ const SideNavigationTab = () => {
                 <Employees></Employees>
             </motion.div>
           </TabPanel>
+          {/* E-Marketing */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
@@ -210,6 +228,7 @@ const SideNavigationTab = () => {
                 <Marketing></Marketing>
             </motion.div>
           </TabPanel>
+          {/* Reports */}
           <TabPanel>
             <motion.div
               initial={{ opacity: 0 }}
