@@ -62,11 +62,19 @@ const Location = () => {
       .then((data) => setLocationData(data.data));
   }, []);
 
-  // Pagination calculations
+  // Filter locations based on search term
+  const filteredLocations = locationData.filter(location => 
+    location.location.toLowerCase().includes(search.toLowerCase()) ||
+    location.address1.toLowerCase().includes(search.toLowerCase()) ||
+    location.address2.toLowerCase().includes(search.toLowerCase()) ||
+    location.published.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Pagination calculations using filtered data
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = locationData.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(locationData.length / recordsPerPage);
+  const currentRecords = filteredLocations.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(filteredLocations.length / recordsPerPage);
 
   return (
     <motion.div
@@ -96,7 +104,10 @@ const Location = () => {
             placeholder="Search..."
             className="p-2 border rounded-lg"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1); // Reset to first page when searching
+            }}
           />
           
           <Button
@@ -147,8 +158,8 @@ const Location = () => {
         <div className="flex justify-between items-center mt-4">
           <div className="text-sm text-gray-600">
             Showing {indexOfFirstRecord + 1} to{" "}
-            {Math.min(indexOfLastRecord, locationData.length)} of{" "}
-            {locationData.length} entries
+            {Math.min(indexOfLastRecord, filteredLocations.length)} of{" "}
+            {filteredLocations.length} entries
           </div>
           <div className="flex space-x-2">
             <button
