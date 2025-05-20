@@ -13,6 +13,7 @@ import {
 } from "react-aria-components";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Location = () => {
   const [search, setSearch] = useState("");
@@ -29,6 +30,57 @@ const Location = () => {
     setEditLocation(null);
   };
 
+  // Toast confirmation dialog
+  const confirmDelete = (id) => {
+    toast.info(
+      <div className="p-4">
+        <p className="mb-3 font-medium">Are you sure you want to delete this location?</p>
+        <div className="flex gap-2 justify-end">
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            onClick={() => {
+              handleDeleteConfirmation(id);
+              toast.dismiss();
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            onClick={() => toast.dismiss()}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>,
+      {
+        position: "top-right",
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+        closeButton: false,
+      }
+    );
+  };
+
+  // Delete confirmation handler
+  const handleDeleteConfirmation = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/locations/${id}`);
+      const { data } = await axios.get("http://localhost:3000/locations");
+      setLocationData(data);
+      toast.success("Location deleted successfully", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    }
+  };
+
   // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,36 +94,28 @@ const Location = () => {
 
     try {
       if (editLocation) {
-        // Update existing location
         await axios.put(`http://localhost:3000/locations/${editLocation._id}`, formData);
-        toast.success("Location updated successfully");
+        toast.success("Location updated successfully", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       } else {
-        // Create new location
         await axios.post("http://localhost:3000/locations", formData);
-        toast.success("Location added successfully");
+        toast.success("Location added successfully", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
 
-      // Refresh data and close modal
       const { data } = await axios.get("http://localhost:3000/locations");
       setLocationData(data);
       closeModal();
       if (!editLocation) setCurrentPage(1);
     } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  // Delete location handler
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this location?")) {
-      try {
-        await axios.delete(`http://localhost:3000/locations/${id}`);
-        const { data } = await axios.get("http://localhost:3000/locations");
-        setLocationData(data);
-        toast.success("Location deleted successfully");
-      } catch (error) {
-        toast.error(error.message);
-      }
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 5000,
+      });
     }
   };
 
@@ -82,7 +126,10 @@ const Location = () => {
         const { data } = await axios.get("http://localhost:3000/locations");
         setLocationData(data);
       } catch (error) {
-        toast.error("Failed to fetch locations");
+        toast.error("Failed to fetch locations", {
+          position: "top-right",
+          autoClose: 5000,
+        });
       }
     };
     fetchData();
@@ -92,7 +139,7 @@ const Location = () => {
   const filteredLocations = locationData.filter(location =>
     Object.values(location).some(value =>
       value.toString().toLowerCase().includes(search.toLowerCase())
-    ));
+  ));
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -106,7 +153,7 @@ const Location = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <ToastContainer position="top-right" />
+      <ToastContainer />
       <div className="bg-white p-4 rounded-xl shadow-lg">
         <div className="flex justify-between items-center mb-4">
           <select
@@ -180,7 +227,7 @@ const Location = () => {
                     <FaEdit size={18} />
                   </button>
                   <button
-                    onClick={() => handleDelete(location._id)}
+                    onClick={() => confirmDelete(location._id)}
                     className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
                   >
                     <FaTrash size={18} />
