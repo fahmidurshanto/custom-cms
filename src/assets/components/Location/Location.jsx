@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaPlusSquare } from "react-icons/fa";
 import {
   Button,
@@ -20,57 +20,80 @@ const Location = () => {
   const [locationData, setLocationData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
+  const [editLocation, setEditLocation] = useState(null);
 
+  // Modal handling
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const handleAddLocation = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const location = form.location.value;
-    const address1 = form.addressLine1.value;
-    const address2 = form.addressLine2.value;
-    const published = form.published.value;
-    const fullLocation = {
-      location,
-      address1,
-      address2,
-      published,
-    };
-    axios
-      .post("http://localhost:3000/locations", fullLocation)
-      .then((data) => {
-        const newLocationInfo = data.data;
-        if (newLocationInfo.insertedId) {
-          toast.success("Location added successfully");
-          form.reset();
-          closeModal();
-        }
-        axios
-          .get("http://localhost:3000/locations")
-          .then((data) => {
-            setLocationData(data.data);
-            setCurrentPage(1); // Reset to first page after adding new location
-          });
-      })
-      .catch((err) => toast.error(err.message));
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditLocation(null);
   };
 
+  // Form submission handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = {
+      location: form.location.value,
+      address1: form.addressLine1.value,
+      address2: form.addressLine2.value,
+      published: form.published.value,
+    };
+
+    try {
+      if (editLocation) {
+        // Update existing location
+        await axios.put(`http://localhost:3000/locations/${editLocation._id}`, formData);
+        toast.success("Location updated successfully");
+      } else {
+        // Create new location
+        await axios.post("http://localhost:3000/locations", formData);
+        toast.success("Location added successfully");
+      }
+
+      // Refresh data and close modal
+      const { data } = await axios.get("http://localhost:3000/locations");
+      setLocationData(data);
+      closeModal();
+      if (!editLocation) setCurrentPage(1);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Delete location handler
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this location?")) {
+      try {
+        await axios.delete(`http://localhost:3000/locations/${id}`);
+        const { data } = await axios.get("http://localhost:3000/locations");
+        setLocationData(data);
+        toast.success("Location deleted successfully");
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  // Fetch initial data
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/locations")
-      .then((data) => setLocationData(data.data));
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3000/locations");
+        setLocationData(data);
+      } catch (error) {
+        toast.error("Failed to fetch locations");
+      }
+    };
+    fetchData();
   }, []);
 
-  // Filter locations based on search term
-  const filteredLocations = locationData.filter(location => 
-    location.location.toLowerCase().includes(search.toLowerCase()) ||
-    location.address1.toLowerCase().includes(search.toLowerCase()) ||
-    location.address2.toLowerCase().includes(search.toLowerCase()) ||
-    location.published.toLowerCase().includes(search.toLowerCase())
-  );
+  // Filter and pagination calculations
+  const filteredLocations = locationData.filter(location =>
+    Object.values(location).some(value =>
+      value.toString().toLowerCase().includes(search.toLowerCase())
+    ));
 
-  // Pagination calculations using filtered data
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredLocations.slice(indexOfFirstRecord, indexOfLastRecord);
@@ -94,25 +117,25 @@ const Location = () => {
               setCurrentPage(1);
             }}
           >
-            <option value={10}>10 records per page</option>
-            <option value={20}>20 records per page</option>
-            <option value={50}>50 records per page</option>
+            {[10, 20, 50].map(option => (
+              <option key={option} value={option}>{option} records per page</option>
+            ))}
           </select>
           
           <input
             type="text"
             placeholder="Search..."
-            className="p-2 border rounded-lg"
+            className="p-2 border rounded-lg w-64"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setCurrentPage(1); // Reset to first page when searching
+              setCurrentPage(1);
             }}
           />
           
           <Button
             onPress={openModal}
-            className="cursor-pointer flex justify-center gap-2 items-center bg-blue-500 text-white px-4 py-2 rounded-lg"
+            className="cursor-pointer flex gap-2 items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           >
             <FaPlusSquare /> Add New
           </Button>
@@ -121,32 +144,46 @@ const Location = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-200">
-              <th className="p-2 text-left">Location</th>
-              <th className="p-2 text-left">Address</th>
-              <th className="p-2 text-left">Published</th>
-              <th className="p-2 text-left">Actions</th>
+              {["Location", "Address", "Published", "Actions"].map((header, index) => (
+                <th key={index} className="p-2 text-left">{header}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {currentRecords.map((location, index) => (
               <motion.tr
-                key={index}
-                className="border-b hover:bg-gray-100"
+                key={location._id}
+                className="border-b hover:bg-gray-50"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
                 <td className="p-2">{location.location}</td>
+                <td className="p-2">{`${location.address1}, ${location.address2}`}</td>
                 <td className="p-2">
-                  {location.address1}, {location.address2}
+                  <span className={`px-2 py-1 rounded-full text-sm ${
+                    location.published === "Yes" 
+                      ? "bg-green-100 text-green-800" 
+                      : "bg-red-100 text-red-800"
+                  }`}>
+                    {location.published}
+                  </span>
                 </td>
-                <td className="p-2">{location.published}</td>
-                <td className="p-2 flex space-x-2">
-                  <button className="bg-blue-500 text-white p-2 rounded-lg">
-                    <FaEdit />
+                <td className="p-2 flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditLocation(location);
+                      openModal();
+                    }}
+                    className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                  >
+                    <FaEdit size={18} />
                   </button>
-                  <button className="bg-red-500 text-white p-2 rounded-lg">
-                    <FaTrash />
+                  <button
+                    onClick={() => handleDelete(location._id)}
+                    className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                  >
+                    <FaTrash size={18} />
                   </button>
                 </td>
               </motion.tr>
@@ -161,42 +198,34 @@ const Location = () => {
             {Math.min(indexOfLastRecord, filteredLocations.length)} of{" "}
             {filteredLocations.length} entries
           </div>
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className={`px-3 py-1 rounded ${
-                currentPage === 1
-                  ? "bg-gray-200 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"
               }`}
             >
               Previous
             </button>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+            {Array.from({ length: totalPages }, (_, i) => (
               <button
-                key={number}
-                onClick={() => setCurrentPage(number)}
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
                 className={`px-3 py-1 rounded ${
-                  currentPage === number
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-100 hover:bg-blue-200"
+                  currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-blue-100 hover:bg-blue-200"
                 }`}
               >
-                {number}
+                {i + 1}
               </button>
             ))}
 
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
               className={`px-3 py-1 rounded ${
-                currentPage === totalPages
-                  ? "bg-gray-200 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"
               }`}
             >
               Next
@@ -205,77 +234,85 @@ const Location = () => {
         </div>
       </div>
 
-      {/* Modal for adding new location */}
+      {/* Add/Edit Modal */}
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog>
           {({ close }) => (
             <motion.div
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/50 flex items-center justify-center p-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
               <motion.div
-                className="bg-white rounded-lg p-6 w-full max-w-md"
+                className="bg-white rounded-xl p-6 w-full max-w-md"
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
               >
                 <Heading slot="title" className="text-xl font-bold mb-4">
-                  Add New Location
+                  {editLocation ? "Edit Location" : "Add New Location"}
                 </Heading>
-                <form onSubmit={handleAddLocation} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <TextField className="block">
-                    <Label className="block mb-1">Location</Label>
+                    <Label className="block mb-1 font-medium">Location Name</Label>
                     <Input
-                      required
                       name="location"
-                      className="w-full p-2 border rounded"
-                      placeholder="Location"
+                      required
+                      defaultValue={editLocation?.location || ""}
+                      className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </TextField>
+
                   <TextField className="block">
-                    <Label className="block mb-1">Address Line 1</Label>
+                    <Label className="block mb-1 font-medium">Address Line 1</Label>
                     <Input
-                      required
-                      className="w-full p-2 border rounded"
-                      placeholder="Address Line 1"
                       name="addressLine1"
-                    />
-                  </TextField>
-                  <TextField className="block">
-                    <Label className="block mb-1">Address Line 2</Label>
-                    <Input
                       required
-                      className="w-full p-2 border rounded"
-                      placeholder="Address Line 2"
-                      name="addressLine2"
+                      defaultValue={editLocation?.address1 || ""}
+                      className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </TextField>
-                  <TextField className="flex items-center gap-2.5">
-                    <div className="flex items-center gap-1.5">
-                      <label>
-                        <span>Yes</span>
-                      </label>
-                      <input type="radio" value="Yes" name="published" />
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <label>
-                        <span>No</span>
-                      </label>
-                      <input type="radio" value="No" name="published" />
-                    </div>
+
+                  <TextField className="block">
+                    <Label className="block mb-1 font-medium">Address Line 2</Label>
+                    <Input
+                      name="addressLine2"
+                      required
+                      defaultValue={editLocation?.address2 || ""}
+                      className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
                   </TextField>
-                  <div className="flex justify-end space-x-2">
+
+                  <div className="space-y-2">
+                    <Label className="block mb-1 font-medium">Published Status</Label>
+                    <div className="flex gap-4">
+                      {["Yes", "No"].map((option) => (
+                        <label key={option} className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="published"
+                            value={option}
+                            required
+                            defaultChecked={editLocation?.published === option}
+                            className="w-4 h-4 text-blue-600"
+                          />
+                          <span>{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3 mt-6">
                     <Button
                       onPress={closeModal}
-                      className="px-4 py-2 border rounded-lg cursor-pointer"
+                      className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </Button>
                     <Button
                       type="submit"
-                      className="px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600"
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                     >
-                      Save
+                      {editLocation ? "Save Changes" : "Add Location"}
                     </Button>
                   </div>
                 </form>
