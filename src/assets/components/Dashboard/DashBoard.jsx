@@ -1,14 +1,19 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 
 const DashBoard = () => {
-    const students = useLoaderData();
-    console.log(students)
+    const [students, setStudents] = useState([]);
+    useEffect(() =>{
+        axios.get("http://localhost:3000/students")
+        .then(res => setStudents(res.data))
+        .catch(err => console.log(err))
+    })
     return (
         <div className='flex flex-col items-center justify-center h-screen'>
             <h1 className='text-2xl font-bold'>Dashboard</h1>
             <div>
-                <button className='bg-amber-600 text-white p-4  rounded-md'><Link to="/students" className='text-5xl'>Students</Link></button>
+                <button className='bg-amber-600 text-white p-4  rounded-md'><Link to="/students" className='text-5xl'>Students: {students.length}</Link></button>
             </div>
         </div>
     );

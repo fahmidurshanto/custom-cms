@@ -20,7 +20,7 @@ const NewStudents = () => {
         <button><Link to="/" className="btn btn-primary flex items-center gap-2 text-white bg-black py-2 px-4 rounded-md"><BsArrow90DegLeft /> Back to home</Link></button>
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-          Newly Admitted Students
+          New Admitted Students: {students.length}
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {students.map((student, index) => (

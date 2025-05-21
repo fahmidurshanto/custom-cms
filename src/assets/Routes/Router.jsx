@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/students",
-        loader: () =>  fetch("http://localhost:3000/admission"),
+        loader: () =>  fetch("http://localhost:3000/students"),
         element: <NewStudents></NewStudents>
     }
 ])
