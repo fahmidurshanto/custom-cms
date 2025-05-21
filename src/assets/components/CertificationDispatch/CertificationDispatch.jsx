@@ -1,18 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FiEdit, FiTrash2, FiPlus, FiCheck } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiPlus } from "react-icons/fi";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Button,
-  Dialog,
-  Heading,
-  Input,
-  Label,
-  Modal,
-  TextField,
-} from "react-aria-components";
+import { Button, Dialog, Heading, Input, Label, Modal, TextField } from "react-aria-components";
 
 const CertificationDispatch = () => {
   const [search, setSearch] = useState("");
@@ -21,6 +13,9 @@ const CertificationDispatch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
   const [editCertification, setEditCertification] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+  const [coursesError, setCoursesError] = useState(null);
 
   // Fetch certifications
   useEffect(() => {
@@ -35,16 +30,31 @@ const CertificationDispatch = () => {
     fetchCertifications();
   }, []);
 
+  // Fetch courses
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/courses");
+        setCourses(data);
+        setLoadingCourses(false);
+      } catch (error) {
+        setCoursesError(error.message);
+        setLoadingCourses(false);
+        toast.error("Failed to fetch courses");
+      }
+    };
+    fetchCourses();
+  }, []);
+
   // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = {
-      certificateId: form.certificateId.value,
-      recipient: form.recipient.value,
-      course: form.course.value,
-      issueDate: form.issueDate.value,
-      status: form.status.value
+      semiDate: form.semiDate.value,
+      name: form.name.value,
+      doorNumber: form.doorNumber.value,
+      courseName: form.courseName.value
     };
 
     try {
@@ -173,36 +183,24 @@ const CertificationDispatch = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Certificate ID</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Recipient</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Issue Date</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Semi Date</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Door Number</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Course Name</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {currentRecords.map((certification, index) => (
+            {currentRecords.map((certification) => (
               <motion.tr
                 key={certification._id}
                 variants={rowVariants}
                 className="hover:bg-gray-50"
               >
-                <td className="px-4 py-4 text-sm font-medium text-gray-900">{certification.certificateId}</td>
-                <td className="px-4 py-4 text-sm text-gray-500">{certification.recipient}</td>
-                <td className="px-4 py-4 text-sm text-gray-500">{certification.course}</td>
-                <td className="px-4 py-4 text-sm text-gray-500 text-center">
-                  {new Date(certification.issueDate).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-center">
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    certification.status === "Issued" 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}>
-                    {certification.status}
-                  </span>
-                </td>
+                <td className="px-4 py-4 text-sm text-gray-900">{certification.semiDate}</td>
+                <td className="px-4 py-4 text-sm text-gray-500">{certification.name}</td>
+                <td className="px-4 py-4 text-sm text-gray-500">{certification.doorNumber}</td>
+                <td className="px-4 py-4 text-sm text-gray-500">{certification.courseName}</td>
                 <td className="px-4 py-4 text-center">
                   <div className="flex justify-center gap-2">
                     <motion.button
@@ -230,8 +228,23 @@ const CertificationDispatch = () => {
         </table>
       </motion.div>
 
-      {/* Pagination and Add/Edit Modal */}
-      {/* Similar to previous components, add pagination and modal code here */}
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-gray-700">
+          Showing {indexOfFirstRecord + 1} to {Math.min(indexOfLastRecord, filteredCertifications.length)} of {filteredCertifications.length} entries
+        </span>
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Add/Edit Modal */}
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -253,64 +266,63 @@ const CertificationDispatch = () => {
                   </Heading>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <TextField className="block">
-                      <Label className="block mb-1 font-medium">Certificate ID *</Label>
+                      <Label className="block mb-1 font-medium">Sent Date (DD/MM/YYYY) *</Label>
                       <Input
-                        name="certificateId"
-                        defaultValue={editCertification?.certificateId || ""}
+                        name="semiDate"
+                        defaultValue={editCertification?.semiDate || ""}
+                        className="w-full p-2 border rounded-lg"
+                        placeholder="DD/MM/YYYY"
+                        required
+                      />
+                    </TextField>
+
+                    <TextField className="block">
+                      <Label className="block mb-1 font-medium">Name *</Label>
+                      <Input
+                        name="name"
+                        defaultValue={editCertification?.name || ""}
                         className="w-full p-2 border rounded-lg"
                         required
                       />
                     </TextField>
 
                     <TextField className="block">
-                      <Label className="block mb-1 font-medium">Recipient *</Label>
+                      <Label className="block mb-1 font-medium">Door Number (Address) *</Label>
                       <Input
-                        name="recipient"
-                        defaultValue={editCertification?.recipient || ""}
+                        name="doorNumber"
+                        defaultValue={editCertification?.doorNumber || ""}
                         className="w-full p-2 border rounded-lg"
                         required
                       />
                     </TextField>
 
                     <TextField className="block">
-                      <Label className="block mb-1 font-medium">Course *</Label>
-                      <Input
-                        name="course"
-                        defaultValue={editCertification?.course || ""}
-                        className="w-full p-2 border rounded-lg"
+                      <Label className="block mb-1 font-medium">Course Name *</Label>
+                      <select
+                        name="courseName"
+                        defaultValue={editCertification?.courseName || ""}
+                        className="w-full p-2 border rounded-lg bg-white"
                         required
-                      />
+                        disabled={loadingCourses || !!coursesError}
+                      >
+                        <option value="">Select Course</option>
+                        {loadingCourses ? (
+                          <option disabled>Loading courses...</option>
+                        ) : coursesError ? (
+                          <option disabled>Error loading courses</option>
+                        ) : (
+                          courses.map((course) => (
+                            <option 
+                              key={course._id} 
+                              value={course.title}
+                              selected={editCertification?.courseName === course.title}
+                            >
+                              {course.title}
+                            </option>
+                          ))
+                        )}
+                      </select>
                     </TextField>
-
-                    <TextField className="block">
-                      <Label className="block mb-1 font-medium">Issue Date *</Label>
-                      <Input
-                        type="date"
-                        name="issueDate"
-                        defaultValue={editCertification?.issueDate?.split('T')[0] || ""}
-                        className="w-full p-2 border rounded-lg"
-                        required
-                      />
-                    </TextField>
-
-                    <div className="space-y-2">
-                      <Label className="block mb-1 font-medium">Status *</Label>
-                      <div className="flex gap-4">
-                        {["Issued", "Pending"].map(option => (
-                          <label key={option} className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="status"
-                              value={option}
-                              required
-                              defaultChecked={editCertification?.status === option}
-                              className="w-4 h-4"
-                            />
-                            {option}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
 
                     <div className="flex justify-end gap-3 mt-6">
                       <Button
