@@ -29,7 +29,7 @@ const Vendor = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/vendors");
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/vendors");
         setVendors(data);
       } catch (error) {
         toast.error("Failed to fetch vendors", {
@@ -88,18 +88,18 @@ const Vendor = () => {
 
     try {
       if (editVendor) {
-        await axios.put(`http://localhost:3000/vendors/${editVendor._id}`, formData, {
+        await axios.put(`https://custom-cms-backend.vercel.app/vendors/${editVendor._id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         toast.success("Vendor updated successfully", { position: "top-right", autoClose: 3000 });
       } else {
-        await axios.post("http://localhost:3000/vendors", formData, {
+        await axios.post("https://custom-cms-backend.vercel.app/vendors", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         toast.success("Vendor added successfully", { position: "top-right", autoClose: 3000 });
       }
 
-      const { data } = await axios.get("http://localhost:3000/vendors");
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/vendors");
       setVendors(data);
       setIsModalOpen(false);
       setEditVendor(null);
@@ -122,8 +122,8 @@ const Vendor = () => {
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:3000/vendors/${id}`);
-                const { data } = await axios.get("http://localhost:3000/vendors");
+                await axios.delete(`https://custom-cms-backend.vercel.app/vendors/${id}`);
+                const { data } = await axios.get("https://custom-cms-backend.vercel.app/vendors");
                 setVendors(data);
                 toast.dismiss();
                 toast.success("Vendor deleted", { position: "top-right", autoClose: 3000 });

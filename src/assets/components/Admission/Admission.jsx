@@ -41,7 +41,7 @@ const Admission = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Admission Data:", formData);
-    axios.post("http://localhost:3000/students", formData)
+    axios.post("https://custom-cms-backend.vercel.app/students", formData)
     .then(data => {
       if(data.data.insertedId){
         toast.success("New admission created successfully!", {

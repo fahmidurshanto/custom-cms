@@ -17,8 +17,8 @@ const Employees = () => {
     const fetchData = async () => {
       try {
         const [employeesRes, vendorsRes] = await Promise.all([
-          axios.get('http://localhost:3000/employees'),
-          axios.get('http://localhost:3000/vendors')
+          axios.get('https://custom-cms-backend.vercel.app/employees'),
+          axios.get('https://custom-cms-backend.vercel.app/vendors')
         ]);
         setEmployees(employeesRes.data);
         console.log(vendorsRes.data)
@@ -54,7 +54,7 @@ const Employees = () => {
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:3000/employees/${id}`);
+                await axios.delete(`https://custom-cms-backend.vercel.app/employees/${id}`);
                 setEmployees(employees.filter(emp => emp.id !== id));
                 toast.dismiss();
                 toast.success("Employee deleted successfully");
@@ -83,14 +83,14 @@ const Employees = () => {
     
     try {
       if (editEmployee) {
-        await axios.put(`http://localhost:3000/employees/${editEmployee.id}`, formData);
+        await axios.put(`https://custom-cms-backend.vercel.app/employees/${editEmployee.id}`, formData);
         toast.success('Employee updated');
       } else {
-        await axios.post('http://localhost:3000/employees', formData);
+        await axios.post('https://custom-cms-backend.vercel.app/employees', formData);
         toast.success('Employee added');
       }
       
-      const { data } = await axios.get('http://localhost:3000/employees');
+      const { data } = await axios.get('https://custom-cms-backend.vercel.app/employees');
       setEmployees(data);
       setIsModalOpen(false);
       setEditEmployee(null);

@@ -21,7 +21,7 @@ const CertificationDispatch = () => {
   useEffect(() => {
     const fetchCertifications = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/certifications");
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/certifications");
         setCertifications(data);
       } catch (error) {
         toast.error("Failed to fetch certifications");
@@ -59,14 +59,14 @@ const CertificationDispatch = () => {
 
     try {
       if (editCertification) {
-        await axios.put(`http://localhost:3000/certifications/${editCertification._id}`, formData);
+        await axios.put(`https://custom-cms-backend.vercel.app/certifications/${editCertification._id}`, formData);
         toast.success("Certification updated successfully");
       } else {
-        await axios.post("http://localhost:3000/certifications", formData);
+        await axios.post("https://custom-cms-backend.vercel.app/certifications", formData);
         toast.success("Certification added successfully");
       }
 
-      const { data } = await axios.get("http://localhost:3000/certifications");
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/certifications");
       setCertifications(data);
       setIsModalOpen(false);
       setEditCertification(null);
@@ -85,8 +85,8 @@ const CertificationDispatch = () => {
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:3000/certifications/${id}`);
-                const { data } = await axios.get("http://localhost:3000/certifications");
+                await axios.delete(`https://custom-cms-backend.vercel.app/certifications/${id}`);
+                const { data } = await axios.get("https://custom-cms-backend.vercel.app/certifications");
                 setCertifications(data);
                 toast.dismiss();
                 toast.success("Certification deleted");

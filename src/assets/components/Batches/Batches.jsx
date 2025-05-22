@@ -26,7 +26,7 @@ const Batches = () => {
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/batches");
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/batches");
         setBatches(data);
       } catch (error) {
         toast.error("Failed to fetch batches");
@@ -49,14 +49,14 @@ const Batches = () => {
 
     try {
       if (editBatch) {
-        await axios.put(`http://localhost:3000/batches/${editBatch._id}`, formData);
+        await axios.put(`https://custom-cms-backend.vercel.app/batches/${editBatch._id}`, formData);
         toast.success("Batch updated successfully");
       } else {
-        await axios.post("http://localhost:3000/batches", formData);
+        await axios.post("https://custom-cms-backend.vercel.app/batches", formData);
         toast.success("Batch added successfully");
       }
 
-      const { data } = await axios.get("http://localhost:3000/batches");
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/batches");
       setBatches(data);
       setIsModalOpen(false);
       setEditBatch(null);
@@ -75,8 +75,8 @@ const Batches = () => {
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:3000/batches/${id}`);
-                const { data } = await axios.get("http://localhost:3000/batches");
+                await axios.delete(`https://custom-cms-backend.vercel.app/batches/${id}`);
+                const { data } = await axios.get("https://custom-cms-backend.vercel.app/batches");
                 setBatches(data);
                 toast.dismiss();
                 toast.success("Batch deleted");

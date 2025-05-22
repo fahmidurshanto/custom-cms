@@ -26,7 +26,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/courses");
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/courses");
         setCourses(data);
       } catch (error) {
         toast.error("Failed to fetch courses", {
@@ -51,14 +51,14 @@ const Courses = () => {
 
     try {
       if (editCourse) {
-        await axios.put(`http://localhost:3000/courses/${editCourse._id}`, formData);
+        await axios.put(`https://custom-cms-backend.vercel.app/courses/${editCourse._id}`, formData);
         toast.success("Course updated successfully", { position: "top-right", autoClose: 3000 });
       } else {
-        await axios.post("http://localhost:3000/courses", formData);
+        await axios.post("https://custom-cms-backend.vercel.app/courses", formData);
         toast.success("Course added successfully", { position: "top-right", autoClose: 3000 });
       }
 
-      const { data } = await axios.get("http://localhost:3000/courses");
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/courses");
       setCourses(data);
       setIsModalOpen(false);
       setEditCourse(null);
@@ -78,8 +78,8 @@ const Courses = () => {
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:3000/courses/${id}`);
-                const { data } = await axios.get("http://localhost:3000/courses");
+                await axios.delete(`https://custom-cms-backend.vercel.app/courses/${id}`);
+                const { data } = await axios.get("https://custom-cms-backend.vercel.app/courses");
                 setCourses(data);
                 toast.dismiss();
                 toast.success("Course deleted", { position: "top-right", autoClose: 3000 });

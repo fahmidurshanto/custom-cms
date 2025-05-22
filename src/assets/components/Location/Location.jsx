@@ -66,8 +66,8 @@ const Location = () => {
   // Delete confirmation handler
   const handleDeleteConfirmation = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/locations/${id}`);
-      const { data } = await axios.get("http://localhost:3000/locations");
+      await axios.delete(`https://custom-cms-backend.vercel.app/locations/${id}`);
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/locations");
       setLocationData(data);
       toast.success("Location deleted successfully", {
         position: "top-right",
@@ -94,20 +94,20 @@ const Location = () => {
 
     try {
       if (editLocation) {
-        await axios.put(`http://localhost:3000/locations/${editLocation._id}`, formData);
+        await axios.put(`https://custom-cms-backend.vercel.app/locations/${editLocation._id}`, formData);
         toast.success("Location updated successfully", {
           position: "top-right",
           autoClose: 3000,
         });
       } else {
-        await axios.post("http://localhost:3000/locations", formData);
+        await axios.post("https://custom-cms-backend.vercel.app/locations", formData);
         toast.success("Location added successfully", {
           position: "top-right",
           autoClose: 3000,
         });
       }
 
-      const { data } = await axios.get("http://localhost:3000/locations");
+      const { data } = await axios.get("https://custom-cms-backend.vercel.app/locations");
       setLocationData(data);
       closeModal();
       if (!editLocation) setCurrentPage(1);
@@ -123,7 +123,7 @@ const Location = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/locations");
+        const { data } = await axios.get("https://custom-cms-backend.vercel.app/locations");
         setLocationData(data);
       } catch (error) {
         toast.error("Failed to fetch locations", {

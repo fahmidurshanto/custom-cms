@@ -5,7 +5,7 @@ import { Link, useLoaderData } from 'react-router-dom';
 const DashBoard = () => {
     const [students, setStudents] = useState([]);
     useEffect(() =>{
-        axios.get("http://localhost:3000/students")
+        axios.get("https://custom-cms-backend.vercel.app/students")
         .then(res => setStudents(res.data))
         .catch(err => console.log(err))
     })

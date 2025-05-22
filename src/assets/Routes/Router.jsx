@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/students",
-        loader: () =>  fetch("http://localhost:3000/students"),
+        loader: () =>  fetch("https://custom-cms-backend.vercel.app/students"),
         element: <NewStudents></NewStudents>
     }
 ])
