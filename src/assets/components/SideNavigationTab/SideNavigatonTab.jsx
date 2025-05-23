@@ -17,9 +17,9 @@ const SideNavigationTab = () => {
   const [tabIndex, setTabIndex] = useState([]); // State to track the active tab index
 
   return (
-    <div className="flex">
+    <div className="flex h-full ">
       {/* Left Side Navigation Bar */}
-      <div className="bg-gray-100 p-4">
+      <div className="bg-gray-500 text-white p-4 rounded-md mt-1.5 ml-1.5">
         <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
           <TabList className="flex flex-col gap-2">
             {/* Dashboard */}

@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Username:", username);
     console.log("Password:", password);
     // Add your login logic here
+    if (username === "admin" && password === "password") {
+      navigate("/");
+    } else {
+      alert("Invalid username or password");
+    }
   };
 
   return (

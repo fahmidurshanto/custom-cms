@@ -122,7 +122,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/students" className='dashboard-card bg-blue-500'>
+                    <Link to="/students" className='dashboard-card bg-blue-100'>
                         <h3 className='text-xl font-semibold'>Students</h3>
                         <p className='text-4xl font-bold'>{data.students}</p>
                     </Link>
@@ -134,7 +134,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/locations" className='dashboard-card bg-green-500'>
+                    <Link to="/locations" className='dashboard-card bg-green-100'>
                         <h3 className='text-xl font-semibold'>Locations</h3>
                         <p className='text-4xl font-bold'>{data.locations}</p>
                     </Link>
@@ -146,7 +146,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/vendors" className='dashboard-card bg-yellow-500'>
+                    <Link to="/vendors" className='dashboard-card bg-yellow-100'>
                         <h3 className='text-xl font-semibold'>Vendors</h3>
                         <p className='text-4xl font-bold'>{data.vendors}</p>
                     </Link>
@@ -158,7 +158,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/employees" className='dashboard-card bg-purple-500'>
+                    <Link to="/employees" className='dashboard-card bg-purple-100'>
                         <h3 className='text-xl font-semibold'>Employees</h3>
                         <p className='text-4xl font-bold'>{data.employees}</p>
                     </Link>
@@ -170,7 +170,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/courses" className='dashboard-card bg-pink-500'>
+                    <Link to="/courses" className='dashboard-card bg-pink-100'>
                         <h3 className='text-xl font-semibold'>Courses</h3>
                         <p className='text-4xl font-bold'>{data.courses}</p>
                     </Link>
@@ -182,7 +182,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/batches" className='dashboard-card bg-indigo-500'>
+                    <Link to="/batches" className='dashboard-card bg-indigo-100'>
                         <h3 className='text-xl font-semibold'>Batches</h3>
                         <p className='text-4xl font-bold'>{data.batches}</p>
                     </Link>
@@ -194,7 +194,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/certifications" className='dashboard-card bg-orange-500'>
+                    <Link to="/certifications" className='dashboard-card bg-orange-100'>
                         <h3 className='text-xl font-semibold'>Certifications</h3>
                         <p className='text-4xl font-bold'>{data.certifications}</p>
                     </Link>
@@ -206,7 +206,7 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/e-marketing" className='dashboard-card bg-red-500'>
+                    <Link to="/e-marketing" className='dashboard-card bg-red-100'>
                         <h3 className='text-xl font-semibold'>E-Marketing</h3>
                         <p className='text-4xl font-bold'>{data.emails}</p>
                     </Link>

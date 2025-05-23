@@ -6,7 +6,9 @@ function App() {
 
   return (
     <>
+     <div className="">
      <SideNavigationTab></SideNavigationTab>
+     </div>
      <Outlet></Outlet>
     </>
   )
