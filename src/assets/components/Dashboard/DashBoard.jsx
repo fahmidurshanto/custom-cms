@@ -76,8 +76,16 @@ const DashBoard = () => {
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
-        hover: { scale: 1.05, transition: { type: 'spring', stiffness: 300 } },
-        tap: { scale: 0.95 }
+        hover: { 
+            scale: 1.05, 
+            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            transition: { 
+                type: 'spring', 
+                stiffness: 300,
+                duration: 0.3
+            } 
+        },
+        tap: { scale: 0.98 }
     };
 
     if (data.loading) return (
@@ -86,7 +94,7 @@ const DashBoard = () => {
             animate={{ opacity: 1 }}
             className='flex justify-center items-center h-screen'
         >
-            Loading...
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </motion.div>
     );
 
@@ -94,18 +102,28 @@ const DashBoard = () => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className='flex justify-center items-center h-screen text-red-500'
+            className='flex flex-col justify-center items-center h-screen text-red-500 p-4'
         >
-            Error: {data.error}
+            <div className="text-2xl mb-4">⚠️ Error Loading Data</div>
+            <div className="bg-red-50 p-4 rounded-lg max-w-md text-center">
+                {data.error}
+            </div>
+            <button 
+                className="mt-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                onClick={() => window.location.reload()}
+            >
+                Retry
+            </button>
         </motion.div>
     );
 
     return (
-        <div className='min-h-screen p-8'>
+        <div className='min-h-screen p-4 md:p-8 bg-gradient-to-br from-gray-50 to-gray-100'>
             <motion.h1 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className='text-3xl font-bold text-center mb-8'
+                transition={{ duration: 0.5 }}
+                className='text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800'
             >
                 Dashboard Overview
             </motion.h1>
@@ -114,7 +132,7 @@ const DashBoard = () => {
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+                className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6'
             >
                 {/* Students Card */}
                 <motion.div
@@ -122,9 +140,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/students" className='dashboard-card bg-blue-100'>
-                        <h3 className='text-xl font-semibold'>Students</h3>
+                    <Link 
+                        to="/students" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-blue-400 to-blue-600 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Students</h3>
                         <p className='text-4xl font-bold'>{data.students}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '75%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -134,9 +158,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/locations" className='dashboard-card bg-green-100'>
-                        <h3 className='text-xl font-semibold'>Locations</h3>
+                    <Link 
+                        to="/locations" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Locations</h3>
                         <p className='text-4xl font-bold'>{data.locations}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '60%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -146,9 +176,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/vendors" className='dashboard-card bg-yellow-100'>
-                        <h3 className='text-xl font-semibold'>Vendors</h3>
+                    <Link 
+                        to="/vendors" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-amber-400 to-amber-600 text-gray-800'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Vendors</h3>
                         <p className='text-4xl font-bold'>{data.vendors}</p>
+                        <div className="mt-4 h-1 bg-gray-800 bg-opacity-20 rounded-full">
+                            <div className="h-full bg-gray-800 rounded-full" style={{ width: '45%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -158,9 +194,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/employees" className='dashboard-card bg-purple-100'>
-                        <h3 className='text-xl font-semibold'>Employees</h3>
+                    <Link 
+                        to="/employees" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-violet-500 to-violet-700 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Employees</h3>
                         <p className='text-4xl font-bold'>{data.employees}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '65%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -170,9 +212,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/courses" className='dashboard-card bg-pink-100'>
-                        <h3 className='text-xl font-semibold'>Courses</h3>
+                    <Link 
+                        to="/courses" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-rose-400 to-rose-600 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Courses</h3>
                         <p className='text-4xl font-bold'>{data.courses}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '55%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -182,9 +230,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/batches" className='dashboard-card bg-indigo-100'>
-                        <h3 className='text-xl font-semibold'>Batches</h3>
+                    <Link 
+                        to="/batches" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Batches</h3>
                         <p className='text-4xl font-bold'>{data.batches}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '70%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -194,9 +248,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/certifications" className='dashboard-card bg-orange-100'>
-                        <h3 className='text-xl font-semibold'>Certifications</h3>
+                    <Link 
+                        to="/certifications" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-600 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>Certifications</h3>
                         <p className='text-4xl font-bold'>{data.certifications}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '50%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
 
@@ -206,9 +266,15 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link to="/e-marketing" className='dashboard-card bg-red-100'>
-                        <h3 className='text-xl font-semibold'>E-Marketing</h3>
+                    <Link 
+                        to="/e-marketing" 
+                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-fuchsia-500 to-fuchsia-700 text-white'
+                    >
+                        <h3 className='text-xl font-semibold mb-2'>E-Marketing</h3>
                         <p className='text-4xl font-bold'>{data.emails}</p>
+                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
+                            <div className="h-full bg-white rounded-full" style={{ width: '80%' }}></div>
+                        </div>
                     </Link>
                 </motion.div>
             </motion.div>
