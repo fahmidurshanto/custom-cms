@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FaUserGraduate, FaMapMarkerAlt, FaBuilding, FaUsers, FaBook, FaLayerGroup, FaCertificate, FaEnvelope } from 'react-icons/fa';
 
 const DashBoard = () => {
     const [data, setData] = useState({
@@ -67,23 +68,20 @@ const DashBoard = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.1,
-                when: "beforeChildren"
+                staggerChildren: 0.15,
+                when: "beforeChildren",
+                duration: 0.5
             }
         }
     };
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
         hover: { 
-            scale: 1.05, 
-            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-            transition: { 
-                type: 'spring', 
-                stiffness: 300,
-                duration: 0.3
-            } 
+            scale: 1.03,
+            boxShadow: '0 10px 20px rgba(0,0,0,0.12)',
+            transition: { type: 'spring', stiffness: 300 }
         },
         tap: { scale: 0.98 }
     };
@@ -94,7 +92,7 @@ const DashBoard = () => {
             animate={{ opacity: 1 }}
             className='flex justify-center items-center h-screen'
         >
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            Loading...
         </motion.div>
     );
 
@@ -102,37 +100,55 @@ const DashBoard = () => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className='flex flex-col justify-center items-center h-screen text-red-500 p-4'
+            className='flex justify-center items-center h-screen text-red-500'
         >
-            <div className="text-2xl mb-4">⚠️ Error Loading Data</div>
-            <div className="bg-red-50 p-4 rounded-lg max-w-md text-center">
-                {data.error}
-            </div>
-            <button 
-                className="mt-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                onClick={() => window.location.reload()}
-            >
-                Retry
-            </button>
+            Error: {data.error}
         </motion.div>
     );
 
     return (
-        <div className='min-h-screen p-4 md:p-8 bg-gradient-to-br from-gray-50 to-gray-100'>
-            <motion.h1 
+        <div className='min-h-screen p-8 bg-gray-50'>
+            <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className='text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800'
+                className='max-w-7xl mx-auto mb-12 text-center'
             >
-                Dashboard Overview
-            </motion.h1>
+                <h1 className='text-4xl font-bold text-gray-800 mb-4'>Dashboard Overview</h1>
+                <p className='text-gray-600 text-lg'>Welcome to your Custom CMS Dashboard</p>
+            </motion.div>
+
+            {/* Summary Section */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className='max-w-7xl mx-auto mb-12 p-6 bg-white rounded-xl shadow-lg'
+            >
+                <h2 className='text-2xl font-semibold text-gray-800 mb-4'>Quick Summary</h2>
+                <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+                    <div className='p-4 bg-blue-50 rounded-lg'>
+                        <p className='text-sm text-blue-600 font-medium'>Total Users</p>
+                        <p className='text-2xl font-bold text-blue-800'>{data.students + data.employees}</p>
+                    </div>
+                    <div className='p-4 bg-green-50 rounded-lg'>
+                        <p className='text-sm text-green-600 font-medium'>Active Courses</p>
+                        <p className='text-2xl font-bold text-green-800'>{data.courses}</p>
+                    </div>
+                    <div className='p-4 bg-purple-50 rounded-lg'>
+                        <p className='text-sm text-purple-600 font-medium'>Total Batches</p>
+                        <p className='text-2xl font-bold text-purple-800'>{data.batches}</p>
+                    </div>
+                    <div className='p-4 bg-orange-50 rounded-lg'>
+                        <p className='text-sm text-orange-600 font-medium'>Certifications</p>
+                        <p className='text-2xl font-bold text-orange-800'>{data.certifications}</p>
+                    </div>
+                </div>
+            </motion.div>
             
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6'
+                className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto'
             >
                 {/* Students Card */}
                 <motion.div
@@ -140,15 +156,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/students" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-blue-400 to-blue-600 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Students</h3>
-                        <p className='text-4xl font-bold'>{data.students}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '75%' }}></div>
+                    <Link to="/students" className='block p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-blue-900'>Students</h3>
+                            <FaUserGraduate className='text-2xl text-blue-500' />
                         </div>
+                        <p className='text-4xl font-bold text-blue-700'>{data.students}</p>
+                        <p className='text-sm text-blue-600 mt-2'>Total Registered</p>
                     </Link>
                 </motion.div>
 
@@ -158,15 +172,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/locations" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Locations</h3>
-                        <p className='text-4xl font-bold'>{data.locations}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '60%' }}></div>
+                    <Link to="/locations" className='block p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-green-900'>Locations</h3>
+                            <FaMapMarkerAlt className='text-2xl text-green-500' />
                         </div>
+                        <p className='text-4xl font-bold text-green-700'>{data.locations}</p>
+                        <p className='text-sm text-green-600 mt-2'>Active Centers</p>
                     </Link>
                 </motion.div>
 
@@ -176,15 +188,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/vendors" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-amber-400 to-amber-600 text-gray-800'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Vendors</h3>
-                        <p className='text-4xl font-bold'>{data.vendors}</p>
-                        <div className="mt-4 h-1 bg-gray-800 bg-opacity-20 rounded-full">
-                            <div className="h-full bg-gray-800 rounded-full" style={{ width: '45%' }}></div>
+                    <Link to="/vendors" className='block p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-yellow-900'>Vendors</h3>
+                            <FaBuilding className='text-2xl text-yellow-500' />
                         </div>
+                        <p className='text-4xl font-bold text-yellow-700'>{data.vendors}</p>
+                        <p className='text-sm text-yellow-600 mt-2'>Partner Companies</p>
                     </Link>
                 </motion.div>
 
@@ -194,15 +204,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/employees" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-violet-500 to-violet-700 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Employees</h3>
-                        <p className='text-4xl font-bold'>{data.employees}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '65%' }}></div>
+                    <Link to="/employees" className='block p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-purple-900'>Employees</h3>
+                            <FaUsers className='text-2xl text-purple-500' />
                         </div>
+                        <p className='text-4xl font-bold text-purple-700'>{data.employees}</p>
+                        <p className='text-sm text-purple-600 mt-2'>Team Members</p>
                     </Link>
                 </motion.div>
 
@@ -212,15 +220,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/courses" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-rose-400 to-rose-600 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Courses</h3>
-                        <p className='text-4xl font-bold'>{data.courses}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '55%' }}></div>
+                    <Link to="/courses" className='block p-6 bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-pink-900'>Courses</h3>
+                            <FaBook className='text-2xl text-pink-500' />
                         </div>
+                        <p className='text-4xl font-bold text-pink-700'>{data.courses}</p>
+                        <p className='text-sm text-pink-600 mt-2'>Available Programs</p>
                     </Link>
                 </motion.div>
 
@@ -230,15 +236,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/batches" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Batches</h3>
-                        <p className='text-4xl font-bold'>{data.batches}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '70%' }}></div>
+                    <Link to="/batches" className='block p-6 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-indigo-900'>Batches</h3>
+                            <FaLayerGroup className='text-2xl text-indigo-500' />
                         </div>
+                        <p className='text-4xl font-bold text-indigo-700'>{data.batches}</p>
+                        <p className='text-sm text-indigo-600 mt-2'>Active Classes</p>
                     </Link>
                 </motion.div>
 
@@ -248,15 +252,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/certifications" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-600 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>Certifications</h3>
-                        <p className='text-4xl font-bold'>{data.certifications}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '50%' }}></div>
+                    <Link to="/certifications" className='block p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-orange-900'>Certifications</h3>
+                            <FaCertificate className='text-2xl text-orange-500' />
                         </div>
+                        <p className='text-4xl font-bold text-orange-700'>{data.certifications}</p>
+                        <p className='text-sm text-orange-600 mt-2'>Issued Certificates</p>
                     </Link>
                 </motion.div>
 
@@ -266,15 +268,13 @@ const DashBoard = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link 
-                        to="/e-marketing" 
-                        className='block p-6 rounded-2xl shadow-lg transform transition-all duration-300 bg-gradient-to-br from-fuchsia-500 to-fuchsia-700 text-white'
-                    >
-                        <h3 className='text-xl font-semibold mb-2'>E-Marketing</h3>
-                        <p className='text-4xl font-bold'>{data.emails}</p>
-                        <div className="mt-4 h-1 bg-white bg-opacity-30 rounded-full">
-                            <div className="h-full bg-white rounded-full" style={{ width: '80%' }}></div>
+                    <Link to="/e-marketing" className='block p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300'>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h3 className='text-xl font-semibold text-red-900'>E-Marketing</h3>
+                            <FaEnvelope className='text-2xl text-red-500' />
                         </div>
+                        <p className='text-4xl font-bold text-red-700'>{data.emails}</p>
+                        <p className='text-sm text-red-600 mt-2'>Email Campaigns</p>
                     </Link>
                 </motion.div>
             </motion.div>
