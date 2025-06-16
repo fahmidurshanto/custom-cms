@@ -4,6 +4,10 @@ import Login from "../components/Login/Login";
 import NewStudents from "../../pages/NewStudents/NewStudents";
 import Locations from "../../pages/Locations/Locations";
 import Vendors, { loader as vendorsLoader } from "../../pages/Vendors";
+import Courses, { loader as coursesLoader } from "../../pages/Courses";
+import Employees, { loader as employeesLoader } from "../../pages/Employees";
+import Batches, { loader as batchesLoader } from "../../pages/Batches";
+import Certifications, { loader as certificationsLoader } from "../../pages/Certifications";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +40,26 @@ const router = createBrowserRouter([
           return response.json();
         },
         element: <Locations />
+    },
+    {
+        path: "/courses",
+        loader: coursesLoader,
+        element: <Courses />
+    },
+    {
+        path: "/employees",
+        loader: employeesLoader,
+        element: <Employees />
+    },
+    {
+        path: "/batches",
+        loader: batchesLoader,
+        element: <Batches />
+    },
+    {
+        path: "/certifications",
+        loader: certificationsLoader,
+        element: <Certifications />
     }
 ])
 
