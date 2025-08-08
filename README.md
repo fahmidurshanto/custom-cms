@@ -1,12 +1,57 @@
-# React + Vite
+# Custom CMS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A custom content management system (CMS) for managing the operations of an educational institution or training center.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Dashboard:** A central hub for viewing key metrics and summaries.
+- **Course Management:** Create, update, delete, and manage courses.
+- **Batch Management:** Organize and manage student batches.
+- **Admissions:** Handle the student admission process.
+- **Employee Management:** Manage employee information and roles.
+- **Location Management:** Manage different campus or center locations.
+- **Vendor Management:** Keep track of and manage vendors.
+- **Marketing:** Tools to assist with marketing campaigns.
+- **Reporting:** Generate reports on various aspects of the institution.
+- **Certification Dispatch:** Manage the process of dispatching certifications to students.
 
-## Expanding the ESLint configuration
+## Development Tools
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Vite:** A modern and fast build tool for web development.
+- **React:** A JavaScript library for building user interfaces.
+- **React Router:** For handling routing within the application.
+- **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+- **ESLint:** For identifying and reporting on patterns found in ECMAScript/JavaScript code.
+- **Material UI:** A popular React UI framework.
+- **Axios:** A promise-based HTTP client for the browser and Node.js.
+- **Framer Motion:** A library for creating animations in React.
+
+## Required Skills
+
+- **JavaScript (ES6+):** Proficiency in modern JavaScript.
+- **React:** Strong understanding of React concepts, including hooks and component lifecycle.
+- **React Router:** Experience with client-side routing.
+- **Tailwind CSS:** Familiarity with utility-first CSS and Tailwind's class names.
+- **State Management:** Understanding of state management in React (e.g., Context API, hooks).
+- **REST APIs:** Knowledge of how to interact with RESTful APIs.
+- **Git:** Basic Git commands for version control.
+
+## Getting Started
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd custom-cms
+    ```
+3.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+5.  **Open your browser** and navigate to `http://localhost:5173` (or the port specified in the console).
